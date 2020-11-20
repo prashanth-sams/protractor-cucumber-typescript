@@ -1,0 +1,33 @@
+{
+  "name": "protractor-cucumber-typescript",
+  "description": "Framework built using Protractor, Cucumber, and Typescript tools",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf typeScript/ reports/ screenshots/ logs/",
+    "clean-build": "npm run clean && npm run build",
+    "test": "npm run clean-build && protractor typeScript/src/protractor.config.js",
+    "tst": "npm run clean-build && protractor debug typeScript/src/protractor.config.js",
+    "webdriver-update": "webdriver-manager update",
+    "webdriver-start": "webdriver-manager start"
+  },
+  "author": "Prashanth Sams <sams.prashanth@gmail.com>",
+  "devDependencies": {
+    "@types/cucumber": "^4.0.4",
+    "@types/log4js": "^2.3.5",
+    "@types/node": "^10.7.1",
+    "@types/selenium-webdriver": "^3.0.10",
+    "all-contributors-cli": "^6.1.0",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "cucumber": "^5.1.0",
+    "cucumber-html-reporter": "^4.0.3",
+    "log4js": "^6.3.0",
+    "mkdirp": "^0.5.1",
+    "protractor": "^5.4.0",
+    "protractor-cucumber-framework": "^6.2.1",
+    "protractor-cucumber-steps": "^1.3.8",
+    "rimraf": "^2.6.2",
+    "ts-node": "^8.0.2",
+    "typescript": "^3.0.1"
+  }
+}
