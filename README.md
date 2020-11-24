@@ -10,6 +10,7 @@
 - [x] Loggers
 - [x] TS task scheduler
 - [x] Slack integration
+- [x] Docker integration - Zalenium as a load balancer
 
 ## Installation
 * Install libraries
