@@ -13,11 +13,11 @@ task('slack', ['default'], function (environment) {
   const yourWebHookURL = 'https://hooks.slack.com/services/'+process.env.SLACK_TOKEN;
   const userAccountNotification = {
     'username': 'Protractor | Test Report',
-    'text': '@everyone @here Done with your tests!',
+    'text': '@channel Your tests are cooked!',
     'icon_emoji': ':popcorn:',
     'attachments': [{ 
-      'color': '#eed140',
-      
+      'color': statusColor(),
+
       'fields': [
         {
           'title': 'Environment',
@@ -26,12 +26,12 @@ task('slack', ['default'], function (environment) {
         },
         {
           'title': 'Total Scenarios',
-          'value': '331',
+          'value': scenarioCount(),
           'short': true
         },
         {
           'title': 'Status',
-          'value': 'PASSED',
+          'value': status()  + '    ' + ':champagne:  ' + passedCount() + '    :comet:  ' + failedCount(),
           'short': true
         },
         {
@@ -115,12 +115,78 @@ task('slack', ['default'], function (environment) {
     }
   })();
 
-  function readJsonValues() {
-    fetch(process.cwd() + "/reports/html/cucumber_reporter.html.json")
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-    });
-  }
+  function scenarioCount() {
+    var json = require(process.cwd() + "/reports/html/cucumber_reporter.html.json");
 
+    var [i, j, scenario] = [0,0,0,0];
+    while(i != Object.keys(json).length) {
+      while(j != Object.keys(json[i]['elements']).length) {
+        scenario += 1, j += 1;
+      }
+      j = 0, i += 1;
+    };
+    
+    return scenario;
+  };
+
+  function failedCount() {
+    var json = require(process.cwd() + "/reports/html/cucumber_reporter.html.json");
+
+    var [i, j, k, scenario, passed, failed] = [0, 0, 0, 0, 0, 0];
+    while(i != Object.keys(json).length) {
+      while(j != Object.keys(json[i]['elements']).length) {
+        while(k != Object.keys(json[i]['elements'][j]['steps']).length) {
+          if(Object.values(json[i]['elements'][j]['steps'][k]['result']['status']).join().replace(/,/g,'') == 'failed') {
+            failed += 1;
+            break;
+          }
+          k += 1;
+        }
+        scenario += 1, j += 1;
+        k = 0;
+      }
+      j = 0, i += 1;
+    };
+    
+    return failed;
+  };
+
+  function passedCount() {
+    var json = require(process.cwd() + "/reports/html/cucumber_reporter.html.json");
+
+    var [i, j, k, scenario, passed] = [0, 0, 0, 0, 0];
+    while(i != Object.keys(json).length) {
+      while(j != Object.keys(json[i]['elements']).length) {
+        while(k != Object.keys(json[i]['elements'][j]['steps']).length) {
+          if(Object.values(json[i]['elements'][j]['steps'][k]['result']['status']).join().replace(/,/g,'') == 'failed') {
+            break;
+          } else if((Object.values(json[i]['elements'][j]['steps'][k]['result']['status']).join().replace(/,/g,'') == 'passed') && (k+1 == Object.keys(json[i]['elements'][j]['steps']).length)) {
+            passed += 1;
+          }
+          k += 1;
+        }
+        scenario += 1, j += 1;
+        k = 0;
+      }
+      j = 0, i += 1;
+    };
+    
+    return passed;
+  };
+
+  function status() {
+    if (failedCount() > 0) {
+      return 'FAILED';
+    } else {
+      return 'PASSED';
+    }
+  };
+
+  function statusColor() {
+    if (failedCount() > 0) {
+      return '#bd2d0d';
+    } else {
+      return '#0aa30a';
+    }
+  };
 });
