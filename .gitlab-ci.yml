@@ -1,0 +1,37 @@
+image: docker:latest
+
+services:
+- docker:dind
+
+stages:
+  - scale_up
+  - build
+  - test
+  - scale_down
+
+cache:
+  paths:
+    - node_modules/
+
+launch-containers:
+  stage: scale_up
+  script:
+    - docker-compose up -d --force-recreate
+
+lib-install:
+  image: npm:latest
+  stage: build
+  script:
+    - npm install
+    - npm install -g jake
+    - npm run webdriver-update
+
+test:
+  image: npm:latest
+  stage: test
+  script: npm test
+
+remove-containers:
+  stage: scale_down
+  script:
+    - docker-compose down

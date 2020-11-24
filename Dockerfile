@@ -1,9 +1,6 @@
-FROM node:15.2.1
+FROM node:latest
 
 LABEL maintainer="Prashanth Sams"
-
-RUN apt-get update
-RUN apt-get install -y
 
 RUN npm install -g jake
 
