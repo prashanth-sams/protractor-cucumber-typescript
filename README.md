@@ -39,3 +39,8 @@
     ```
     bash runner/smoke.sh
     ```
+* Docker Execution
+    ```
+    docker-compose up --force-recreate
+    npm test
+    ```
