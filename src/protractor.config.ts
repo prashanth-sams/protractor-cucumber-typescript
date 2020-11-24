@@ -21,6 +21,8 @@ export const config: Config = {
         }
     },
 
+    directConnect: true,
+
     framework: "custom",
     
     frameworkPath: require.resolve("protractor-cucumber-framework"),
