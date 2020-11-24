@@ -24,7 +24,7 @@
     npm run webdriver-update
     ``` 
 
-* Now, start selenium server
+* Optional - start selenium server manually if you don't set `directConnect: true`
     ```
     npm run webdriver-start
     ```
@@ -43,4 +43,5 @@
     ```
     docker-compose up --force-recreate
     npm test
+    docker-compose down
     ```
