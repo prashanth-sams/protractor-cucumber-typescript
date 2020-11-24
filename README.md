@@ -40,8 +40,17 @@
     bash runner/smoke.sh
     ```
 * Docker Execution
+
+    > run tests from local machine
     ```
     docker-compose up --force-recreate
     npm test
+    docker-compose down
+    ```
+    or
+    > run tests from docker machine
+    ```
+    docker-compose up -d --force-recreate
+    bash docker-executor.sh
     docker-compose down
     ```
